@@ -55,10 +55,10 @@ class Settings(BaseSettings):
     NEO4J_PASSWORD: str = "fraudlens_neo4j_pass"
     NEO4J_DATABASE: str = "neo4j"
 
-    # Redis Cache / Message Broker (Phase 4)
+    # Redis Cache / Message Broker
     REDIS_URL: str = "redis://localhost:6379/0"
 
-    # Razorpay Test Configuration (Phase 5)
+    # Razorpay Test Configuration
     RAZORPAY_KEY_ID: str = "rzp_test_placeholder"
     RAZORPAY_KEY_SECRET: str = "rzp_test_secret_placeholder"
     RAZORPAY_WEBHOOK_SECRET: str = "whsec_fraudlens_placeholder"

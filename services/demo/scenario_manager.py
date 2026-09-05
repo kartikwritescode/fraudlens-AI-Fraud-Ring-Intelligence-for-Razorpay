@@ -1,10 +1,10 @@
 """
-Demo Scenario Manager for FraudLens (Hackathon Showcase)
+Scenario Manager for FraudLens Enterprise Threat Simulation
 Deterministically simulates FRAUD RING #042:
 - Wave 1: 3 initial transactions with moderate/high risk
 - Wave 2: Coordinated multi-entity ring:
     37 customers, 5 devices, 3 IP ranges, 2 payment tokens, 4 merchants
-- Attempted volume: dynamically generated ~Rs. 8.4-8.8 Lakh
+- Attempted volume: dynamically generated ~Rs. 8.4-8.9 Lakh
 - Clean resetScenario() functionality with state snapshotting
 """
 

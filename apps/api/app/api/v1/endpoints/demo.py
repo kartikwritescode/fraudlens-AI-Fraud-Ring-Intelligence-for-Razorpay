@@ -126,7 +126,7 @@ async def execute_demo_attack(req: AttackRequest):
 @router.post("/demo/scenario/start", summary="Start Deterministic FRAUD RING #042 Attack Scenario")
 async def start_demo_scenario():
     """
-    Triggers the deterministic hackathon demo for FRAUD RING #042.
+    Triggers the deterministic incident simulation drill for FRAUD RING #042.
     """
     from services.demo.scenario_manager import DemoScenarioManager
     manager = DemoScenarioManager.get_instance()

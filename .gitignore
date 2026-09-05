@@ -58,3 +58,4 @@ desktop.ini
 # Docker Data Volumes
 infra/data/
 db/data/
+docs

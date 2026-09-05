@@ -58,19 +58,22 @@ export const Sidebar: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-[#080B11] border-r border-[#1E293B]/70 flex flex-col justify-between h-screen sticky top-0 select-none z-30 shadow-2xl">
+    <aside
+      aria-label="Platform Navigation"
+      className="w-64 bg-[#080B11] border-r border-[#1E293B]/70 flex flex-col justify-between h-screen sticky top-0 select-none z-30 shadow-2xl shrink-0 hidden md:flex"
+    >
       <div>
         {/* Brand Header */}
         <div className="p-4 border-b border-[#1E293B]/70 bg-[#06080D]/50">
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-3 group focus-visible:ring-1 focus-visible:ring-emerald-400 rounded-lg">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 via-emerald-500/10 to-transparent border border-emerald-500/40 flex items-center justify-center text-emerald-400 shadow-lg shadow-emerald-950/50 group-hover:border-emerald-400/80 transition-all">
-              <ShieldAlert className="w-5 h-5" />
+              <ShieldAlert className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-base tracking-tight text-white font-sans">FraudLens</span>
                 <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 tracking-wider">
-                  v0.1
+                  ENTERPRISE
                 </span>
               </div>
               <p className="text-[11px] text-slate-400 font-medium">Razorpay AI Risk Engine</p>

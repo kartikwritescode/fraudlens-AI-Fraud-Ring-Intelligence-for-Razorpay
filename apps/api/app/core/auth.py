@@ -21,7 +21,7 @@ async def verify_analyst_auth(
     """
     Verifies that the caller possesses valid analyst credentials.
     Supports either X-Analyst-Key header or Authorization: Bearer <token>.
-    In development mode, allows missing headers for streamlined hackathon demo flow.
+    In development mode, allows missing headers for streamlined local developer workflow.
     """
     token = None
     if x_analyst_key:
@@ -34,7 +34,7 @@ async def verify_analyst_auth(
             return VALID_ANALYST_KEYS[token]
         raise AuthenticationFailedError("Invalid or revoked analyst credentials.")
 
-    # Graceful fallback for local development & hackathon demo mode
+    # Graceful fallback for local development & simulation mode
     if settings.APP_ENV == "development":
         return {"analyst_id": "demo_analyst_01", "role": "ANALYST_DEV_MODE"}
 

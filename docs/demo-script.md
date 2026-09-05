@@ -1,6 +1,6 @@
-# FraudLens 90-Second Hackathon Demo Pitch & Script
+# FraudLens Enterprise Incident Response & Detection Walkthrough
 
-## Narrative Arc: "From Ambiguity to Ring Discovery"
+## Narrative Arc: "From Transaction Ambiguity to Coordinated Ring Discovery"
 
 - **00:00 - 00:15**: *The Hook*
   - "Traditional fraud systems evaluate payments one by one. But organized fraudsters do not attack one transaction at a time—they operate coordinated rings."

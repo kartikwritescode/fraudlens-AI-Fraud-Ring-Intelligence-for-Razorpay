@@ -103,14 +103,14 @@ export const CinematicDemoModal: React.FC<DemoModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold text-white font-mono">
-                  DEMO SCENARIO: FRAUD RING #042
+                  INCIDENT DRILL: SYNDICATE ATTACK #042
                 </h2>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-400 border border-red-500/30">
-                  REAL PIPELINE EXECUTION
+                  LIVE PIPELINE DRILL
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Deterministic coordinated attack: 37 customers, 5 devices, 2 tokens, 4 merchants (~₹8.4L)
+                Deterministic coordinated syndicate drill: 37 accounts, 5 devices, 2 card tokens, 4 merchants (~₹8.9L)
               </p>
             </div>
           </div>
@@ -312,7 +312,7 @@ export const CinematicDemoModal: React.FC<DemoModalProps> = ({
         {/* Modal Footer */}
         <div className="p-4 border-t border-[#21262D] bg-[#090A0F] flex items-center justify-between font-mono text-xs">
           <span className="text-slate-400">
-            FraudLens Autonomous Hackathon Engine
+            FraudLens Autonomous Incident Response Engine
           </span>
           <button
             onClick={onClose}
