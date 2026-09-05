@@ -16,6 +16,12 @@ import {
   Zap,
   X,
   RotateCcw,
+  Copy,
+  Check,
+  CreditCard,
+  Smartphone,
+  Globe,
+  ExternalLink,
 } from "lucide-react";
 import { fetchAnalyticsOverview, fetchTransactionFeed, fetchRings, runDemoAttack, resetDemoScenario } from "@/lib/api";
 import { AnalyticsOverviewResponse, TransactionFeedItem, DiscoveredRing } from "@/lib/types";
@@ -55,6 +61,15 @@ export default function OverviewPage() {
   const [attackRunning, setAttackRunning] = useState(false);
   const [attackSummary, setAttackSummary] = useState<any>(null);
   const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [copiedTx, setCopiedTx] = useState<string | null>(null);
+
+  const handleCopyTx = (txId: string) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(txId);
+      setCopiedTx(txId);
+      setTimeout(() => setCopiedTx(null), 1800);
+    }
+  };
 
   const handleRunAttack = async () => {
     setAttackRunning(true);
@@ -253,87 +268,109 @@ export default function OverviewPage() {
       {/* Top 6 KPI Metric Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3.5">
         {/* Monitored */}
-        <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D]">
-          <div className="flex items-center justify-between text-slate-400 text-[11px] font-medium">
+        <div className="p-4 rounded-xl glass-card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors pointer-events-none" />
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
             <span>Txs Monitored</span>
-            <Activity className="w-3.5 h-3.5 text-slate-400" />
+            <div className="w-7 h-7 rounded-lg bg-slate-800/60 border border-slate-700/50 flex items-center justify-center text-slate-300">
+              <Activity className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-xl font-bold text-white mt-1.5 font-mono">
+          <div className="text-2xl font-bold text-white mt-2 font-mono tracking-tight">
             {data.kpis.total_transactions_monitored.toLocaleString()}
           </div>
-          <div className="text-[10px] text-emerald-400 font-mono mt-1 flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            100% Ingested
+          <div className="text-[11px] text-emerald-400 font-mono mt-1.5 flex items-center gap-1.5 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            100% Ingested Stream
           </div>
         </div>
 
         {/* High Risk */}
-        <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D]">
-          <div className="flex items-center justify-between text-slate-400 text-[11px] font-medium">
+        <div className="p-4 rounded-xl glass-card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-colors pointer-events-none" />
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
             <span>High Risk Txs</span>
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <AlertTriangle className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-xl font-bold text-amber-400 mt-1.5 font-mono">
+          <div className="text-2xl font-bold text-amber-400 mt-2 font-mono tracking-tight">
             {data.kpis.high_risk_transactions}
           </div>
-          <div className="text-[10px] text-slate-400 font-mono mt-1">
+          <div className="text-[11px] text-slate-400 font-mono mt-1.5 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400/80" />
             0.65% Alert Density
           </div>
         </div>
 
         {/* Fraud Rings */}
-        <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D]">
-          <div className="flex items-center justify-between text-slate-400 text-[11px] font-medium">
+        <div className="p-4 rounded-xl glass-card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/5 rounded-full blur-2xl group-hover:bg-rose-500/10 transition-colors pointer-events-none" />
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
             <span>Active Rings</span>
-            <Network className="w-3.5 h-3.5 text-red-400" />
+            <div className="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+              <Network className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-xl font-bold text-red-400 mt-1.5 font-mono">
+          <div className="text-2xl font-bold text-rose-400 mt-2 font-mono tracking-tight">
             {data.kpis.active_fraud_rings}
           </div>
-          <div className="text-[10px] text-red-400/80 font-mono mt-1">
+          <div className="text-[11px] text-rose-400/80 font-mono mt-1.5 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
             Graph Coordinated
           </div>
         </div>
 
         {/* ₹ at Risk */}
-        <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D]">
-          <div className="flex items-center justify-between text-slate-400 text-[11px] font-medium">
+        <div className="p-4 rounded-xl glass-card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-red-500/5 rounded-full blur-2xl group-hover:bg-red-500/10 transition-colors pointer-events-none" />
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
             <span>₹ At Risk</span>
-            <ShieldAlert className="w-3.5 h-3.5 text-red-400" />
+            <div className="w-7 h-7 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400">
+              <ShieldAlert className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-xl font-bold text-white mt-1.5 font-mono">
+          <div className="text-2xl font-bold text-white mt-2 font-mono tracking-tight">
             {formatCurrency(data.kpis.total_amount_at_risk || 0)}
           </div>
-          <div className="text-[10px] text-slate-400 font-mono mt-1">
-            Attempted Ring Vol
+          <div className="text-[11px] text-slate-400 font-mono mt-1.5">
+            Attempted Syndicate Vol
           </div>
         </div>
 
         {/* ₹ Prevented */}
-        <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D]">
-          <div className="flex items-center justify-between text-slate-400 text-[11px] font-medium">
+        <div className="p-4 rounded-xl glass-card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full blur-2xl group-hover:bg-emerald-500/10 transition-colors pointer-events-none" />
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
             <span>₹ Prevented</span>
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <CheckCircle2 className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-xl font-bold text-emerald-400 mt-1.5 font-mono">
+          <div className="text-2xl font-bold text-emerald-400 mt-2 font-mono tracking-tight">
             {formatCurrency(data.kpis.total_amount_prevented || 0)}
           </div>
-          <div className="text-[10px] text-emerald-400/80 font-mono mt-1">
-            78% Mitigation Rate
+          <div className="text-[11px] text-emerald-400/90 font-mono mt-1.5 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            78% Automated Shield
           </div>
         </div>
 
         {/* Active Cases */}
-        <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D]">
-          <div className="flex items-center justify-between text-slate-400 text-[11px] font-medium">
+        <div className="p-4 rounded-xl glass-card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-colors pointer-events-none" />
+          <div className="flex items-center justify-between text-slate-400 text-xs font-medium">
             <span>Active Cases</span>
-            <SearchCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400">
+              <SearchCheck className="w-3.5 h-3.5" />
+            </div>
           </div>
-          <div className="text-xl font-bold text-white mt-1.5 font-mono">
+          <div className="text-2xl font-bold text-white mt-2 font-mono tracking-tight">
             {data.kpis.open_cases_count}
           </div>
-          <div className="text-[10px] text-cyan-400 font-mono mt-1">
-            Agent Investigated
+          <div className="text-[11px] text-cyan-400 font-mono mt-1.5 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            AI Agent Dossiers
           </div>
         </div>
       </div>
@@ -342,16 +379,16 @@ export default function OverviewPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Live Risk Feed Snippet */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D]">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <div className="flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
                 <h2 className="text-sm font-bold text-white tracking-wide">Live High-Risk Stream</h2>
-                <span className="text-[11px] text-slate-400 font-mono">(Real-time Ingestion)</span>
+                <span className="text-[11px] text-slate-400 font-mono">(Real-Time Ingestion)</span>
               </div>
               <Link
                 href="/live-risk"
-                className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1"
+                className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/20 transition-all hover:border-emerald-500/40"
               >
                 <span>View Full Feed</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -361,52 +398,77 @@ export default function OverviewPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-[#21262D] text-slate-400 font-mono">
-                    <th className="pb-2.5 font-medium">Tx ID</th>
-                    <th className="pb-2.5 font-medium">Merchant</th>
-                    <th className="pb-2.5 font-medium">Amount</th>
-                    <th className="pb-2.5 font-medium">Score</th>
-                    <th className="pb-2.5 font-medium">Severity</th>
-                    <th className="pb-2.5 font-medium">Ring</th>
-                    <th className="pb-2.5 font-medium text-right">Action</th>
+                  <tr className="border-b border-slate-800/80 text-slate-400 font-mono">
+                    <th className="pb-3 font-semibold">Tx ID</th>
+                    <th className="pb-3 font-semibold">Merchant</th>
+                    <th className="pb-3 font-semibold">Amount</th>
+                    <th className="pb-3 font-semibold">Score</th>
+                    <th className="pb-3 font-semibold">Severity</th>
+                    <th className="pb-3 font-semibold">Ring Link</th>
+                    <th className="pb-3 font-semibold text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#21262D]">
+                <tbody className="divide-y divide-slate-800/50">
                   {recentFeed.length === 0 && refreshing ? (
                     <tr>
-                      <td colSpan={7} className="py-6 text-center text-slate-400 font-mono">
-                        Loading live transactions...
+                      <td colSpan={7} className="py-8 text-center text-slate-400 font-mono">
+                        <div className="flex items-center justify-center gap-2">
+                          <RefreshCw className="w-4 h-4 animate-spin text-emerald-400" />
+                          <span>Syncing live transactions...</span>
+                        </div>
                       </td>
                     </tr>
                   ) : recentFeed.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-6 text-center text-slate-400 font-mono">
+                      <td colSpan={7} className="py-8 text-center text-slate-400 font-mono">
                         No transactions found
                       </td>
                     </tr>
                   ) : (
                     recentFeed.map((tx) => (
-                      <tr key={tx.transaction_id} className="hover:bg-[#21262D]/40 transition-colors">
-                        <td className="py-2.5 font-mono text-slate-200">{tx.transaction_id}</td>
-                        <td className="py-2.5 font-mono text-slate-400">{tx.merchant_id}</td>
-                        <td className="py-2.5 font-mono font-medium text-white">
+                      <tr key={tx.transaction_id} className="hover:bg-slate-800/30 transition-colors group">
+                        <td className="py-3 font-mono text-slate-200">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-medium text-slate-300">{tx.transaction_id}</span>
+                            <button
+                              onClick={() => handleCopyTx(tx.transaction_id)}
+                              className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-slate-700/50 text-slate-400 hover:text-white transition-opacity"
+                              title="Copy ID"
+                            >
+                              {copiedTx === tx.transaction_id ? (
+                                <Check className="w-3 h-3 text-emerald-400" />
+                              ) : (
+                                <Copy className="w-3 h-3" />
+                              )}
+                            </button>
+                          </div>
+                        </td>
+                        <td className="py-3 font-mono text-slate-400">{tx.merchant_id}</td>
+                        <td className="py-3 font-mono font-bold text-white">
                           ₹{tx.amount.toLocaleString("en-IN")}
                         </td>
-                        <td className="py-2.5 font-mono">
-                          <span className="text-red-400 font-semibold">{tx.risk_score.toFixed(2)}</span>
+                        <td className="py-3 font-mono">
+                          <span className="text-rose-400 font-bold">{tx.risk_score.toFixed(2)}</span>
                         </td>
-                        <td className="py-2.5">
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                        <td className="py-3">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
                             {tx.risk_band}
                           </span>
                         </td>
-                        <td className="py-2.5 font-mono text-[11px] text-cyan-400">
-                          {tx.ring_id || "Direct"}
+                        <td className="py-3 font-mono text-[11px] text-cyan-400 font-semibold">
+                          {tx.ring_id ? (
+                            <Link href={`/fraud-rings?selected=${tx.ring_id}`} className="hover:underline flex items-center gap-1">
+                              <span>{tx.ring_id}</span>
+                              <ExternalLink className="w-2.5 h-2.5" />
+                            </Link>
+                          ) : (
+                            <span className="text-slate-500">Standalone</span>
+                          )}
                         </td>
-                        <td className="py-2.5 text-right">
+                        <td className="py-3 text-right">
                           <Link
                             href={`/live-risk?inspect=${tx.transaction_id}`}
-                            className="px-2 py-1 rounded text-[10px] font-mono bg-[#21262D] hover:bg-[#30363D] text-slate-200 transition-colors"
+                            className="px-2.5 py-1 rounded text-[11px] font-mono bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors"
                           >
                             Inspect
                           </Link>
@@ -420,25 +482,25 @@ export default function OverviewPage() {
           </div>
 
           {/* Activity Timeline Card */}
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D]">
-            <div className="flex items-center gap-2 mb-3">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80">
+            <div className="flex items-center gap-2 mb-3.5">
               <Clock className="w-4 h-4 text-emerald-400" />
               <h2 className="text-sm font-bold text-white tracking-wide">Coordinated Attack Progression</h2>
             </div>
             <div className="space-y-2.5 text-xs font-mono">
-              <div className="flex items-start gap-3 p-2 rounded bg-[#090A0F] border border-[#21262D]">
-                <span className="text-red-400 font-bold">17:52:25</span>
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-900/60 border border-slate-800/80">
+                <span className="text-rose-400 font-bold">17:52:25</span>
                 <div>
-                  <span className="text-white font-semibold">Autonomous Hold Authorized</span>: Case CASE-17B176BF confirmed against ring_disc_001. Rs. 1.88L exposure halted.
+                  <span className="text-white font-semibold">Autonomous Hold Authorized</span>: Case CASE-17B176BF confirmed against ring_disc_001. ₹1.88L exposure halted.
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-2 rounded bg-[#090A0F] border border-[#21262D]">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-900/60 border border-slate-800/80">
                 <span className="text-amber-400 font-bold">17:52:03</span>
                 <div>
                   <span className="text-white font-semibold">Bipartite Projection Alert</span>: Multi-entity card token reuse detected across 6 disparate puppet accounts.
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-2 rounded bg-[#090A0F] border border-[#21262D]">
+              <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-900/60 border border-slate-800/80">
                 <span className="text-cyan-400 font-bold">17:46:54</span>
                 <div>
                   <span className="text-white font-semibold">Graph Community Partition</span>: Neo4j Louvain modularity algorithm isolated 10 high-risk attack components.
@@ -450,10 +512,10 @@ export default function OverviewPage() {
 
         {/* Right 1 Col: Top Discovered Fraud Rings */}
         <div className="space-y-4">
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D]">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Network className="w-4 h-4 text-red-400" />
+                <Network className="w-4 h-4 text-rose-400" />
                 <h2 className="text-sm font-bold text-white tracking-wide">Top Discovered Rings</h2>
               </div>
               <Link
@@ -470,20 +532,20 @@ export default function OverviewPage() {
                 <Link
                   key={ring.ring_id}
                   href={`/fraud-rings?selected=${ring.ring_id}`}
-                  className="block p-3 rounded bg-[#090A0F] border border-[#21262D] hover:border-[#30363D] transition-all group"
+                  className="block p-3.5 rounded-lg bg-slate-900/60 border border-slate-800/80 hover:border-slate-700 transition-all group shadow-sm hover:shadow-md"
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-mono font-bold text-xs text-white group-hover:text-emerald-400 transition-colors">
                       {ring.ring_id}
                     </span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-rose-500/15 text-rose-400 border border-rose-500/30">
                       SCORE {ring.risk_score.toFixed(2)}
                     </span>
                   </div>
                   <div className="text-[11px] text-slate-400 mt-1 font-mono">
-                    Pattern: {ring.pattern_type.replace(/_/g, " ")}
+                    Pattern: <span className="text-slate-300 capitalize">{ring.pattern_type.replace(/_/g, " ")}</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-[#21262D] text-[10px] font-mono text-slate-400">
+                  <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-slate-800/80 text-[10px] font-mono text-slate-400">
                     <div>
                       Members: <span className="text-white font-semibold">{ring.member_count}</span>
                     </div>
@@ -497,27 +559,27 @@ export default function OverviewPage() {
           </div>
 
           {/* Quick System Stack Status Card */}
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-3">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-3">
             <h2 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
               <span>Engine Status</span>
             </h2>
             <div className="space-y-2 text-xs font-mono">
-              <div className="flex justify-between p-2 rounded bg-[#090A0F] border border-[#21262D]">
+              <div className="flex justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
                 <span className="text-slate-400">ML Model</span>
-                <span className="text-emerald-400">XGBoost v1 (Loaded)</span>
+                <span className="text-emerald-400 font-semibold">XGBoost v1 (Active)</span>
               </div>
-              <div className="flex justify-between p-2 rounded bg-[#090A0F] border border-[#21262D]">
+              <div className="flex justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
                 <span className="text-slate-400">Graph Memory</span>
-                <span className="text-emerald-400">111,206 Nodes</span>
+                <span className="text-emerald-400 font-semibold">111,206 Nodes</span>
               </div>
-              <div className="flex justify-between p-2 rounded bg-[#090A0F] border border-[#21262D]">
+              <div className="flex justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
                 <span className="text-slate-400">Relationships</span>
-                <span className="text-emerald-400">257,706 Edges</span>
+                <span className="text-emerald-400 font-semibold">257,706 Edges</span>
               </div>
-              <div className="flex justify-between p-2 rounded bg-[#090A0F] border border-[#21262D]">
+              <div className="flex justify-between p-2.5 rounded-lg bg-slate-900/60 border border-slate-800/80">
                 <span className="text-slate-400">Webhook Secret</span>
-                <span className="text-emerald-400">HMAC-SHA256 Active</span>
+                <span className="text-emerald-400 font-semibold">HMAC-SHA256 Active</span>
               </div>
             </div>
           </div>

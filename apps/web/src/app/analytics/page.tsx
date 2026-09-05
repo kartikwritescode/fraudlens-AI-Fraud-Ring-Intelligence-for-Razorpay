@@ -67,12 +67,14 @@ export default function AnalyticsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#21262D] pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/60 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <BarChart3 className="w-5 h-5 text-emerald-400" />
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <BarChart3 className="w-4 h-4 text-emerald-400" />
+            </div>
             <h1 className="text-xl font-bold tracking-tight text-white">Risk & Fraud Analytics Intelligence</h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               50,000 TRANSACTIONS EVALUATED
             </span>
           </div>
@@ -84,48 +86,56 @@ export default function AnalyticsPage() {
 
       {/* Top 3 Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D]">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 shadow-xl">
           <div className="flex items-center justify-between text-slate-400 text-xs font-mono">
-            <span>Detected Attack Value</span>
-            <DollarSign className="w-4 h-4 text-red-400" />
+            <span className="uppercase tracking-wider">Detected Attack Value</span>
+            <div className="w-7 h-7 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+              <DollarSign className="w-4 h-4 text-rose-400" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-white mt-2 font-mono">
+          <div className="text-2xl font-bold text-white mt-2.5 font-mono">
             ₹{data ? (data.kpis.total_amount_at_risk / 100000).toFixed(2) : "0"} Lakhs
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Across 10 algorithmically discovered fraud rings</p>
+          <p className="text-[11px] text-slate-400 mt-1 font-medium">Across 10 algorithmically discovered fraud rings</p>
         </div>
 
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D]">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 shadow-xl">
           <div className="flex items-center justify-between text-slate-400 text-xs font-mono">
-            <span>Prevented Loss Exposure</span>
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span className="uppercase tracking-wider">Prevented Loss Exposure</span>
+            <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-emerald-400 mt-2 font-mono">
+          <div className="text-2xl font-bold text-emerald-400 mt-2.5 font-mono">
             ₹{data ? (data.kpis.total_amount_prevented / 100000).toFixed(2) : "0"} Lakhs
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">Autonomous hold and step-up policy mitigation</p>
+          <p className="text-[11px] text-slate-400 mt-1 font-medium">Autonomous hold and step-up policy mitigation</p>
         </div>
 
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D]">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 shadow-xl">
           <div className="flex items-center justify-between text-slate-400 text-xs font-mono">
-            <span>Global Fraud Incident Density</span>
-            <AlertTriangle className="w-4 h-4 text-amber-400" />
+            <span className="uppercase tracking-wider">Global Fraud Incident Density</span>
+            <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+              <AlertTriangle className="w-4 h-4 text-amber-400" />
+            </div>
           </div>
-          <div className="text-2xl font-bold text-amber-400 mt-2 font-mono">0.65%</div>
-          <p className="text-[11px] text-slate-400 mt-1">325 confirmed anomalies out of 50,000 volume</p>
+          <div className="text-2xl font-bold text-amber-400 mt-2.5 font-mono">0.65%</div>
+          <p className="text-[11px] text-slate-400 mt-1 font-medium">325 confirmed anomalies out of 50,000 volume</p>
         </div>
       </div>
 
       {/* 2-Column Chart Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Chart 1: 24h Trend */}
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-4">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-emerald-400" />
               24-Hour Transaction & Fraud Burst Volume
             </span>
-            <span className="text-[10px] font-mono text-slate-400">Hourly Distribution</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50">
+              Hourly Distribution
+            </span>
           </div>
 
           <div className="h-64 w-full">
@@ -134,19 +144,20 @@ export default function AnalyticsPage() {
                 <AreaChart data={data.risk_trend_hourly}>
                   <defs>
                     <linearGradient id="volGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#38BDF8" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#38BDF8" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#06B6D4" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#06B6D4" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="hour" stroke="#64748B" fontSize={10} fontVariant="mono" />
                   <YAxis stroke="#64748B" fontSize={10} fontVariant="mono" />
                   <Tooltip
-                    contentStyle={{ backgroundColor: "#090A0F", borderColor: "#30363D", fontSize: 11 }}
+                    contentStyle={{ backgroundColor: "#06080D", borderColor: "#1E293B", borderRadius: "8px", fontSize: 11 }}
                   />
                   <Area
                     type="monotone"
                     dataKey="transactions"
-                    stroke="#38BDF8"
+                    stroke="#06B6D4"
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#volGrad)"
                   />
@@ -157,13 +168,15 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Chart 2: Risk Severity Distribution */}
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-4">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-red-400" />
+              <BarChart3 className="w-4 h-4 text-rose-400" />
               Model Calibrated Risk Band Hierarchy
             </span>
-            <span className="text-[10px] font-mono text-slate-400">XGBoost Bands</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50">
+              XGBoost Bands
+            </span>
           </div>
 
           <div className="h-64 w-full">
@@ -172,9 +185,9 @@ export default function AnalyticsPage() {
                 <XAxis dataKey="band" stroke="#64748B" fontSize={10} fontVariant="mono" />
                 <YAxis stroke="#64748B" fontSize={10} fontVariant="mono" />
                 <Tooltip
-                  contentStyle={{ backgroundColor: "#090A0F", borderColor: "#30363D", fontSize: 11 }}
+                  contentStyle={{ backgroundColor: "#06080D", borderColor: "#1E293B", borderRadius: "8px", fontSize: 11 }}
                 />
-                <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="count" radius={[6, 6, 0, 0]}>
                   {riskDistData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}
@@ -185,13 +198,15 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Chart 3: Fraud by Payment Method */}
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-4">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-cyan-400" />
               Fraud Value by Payment Instrument
             </span>
-            <span className="text-[10px] font-mono text-slate-400">Instrument Volume</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50">
+              Instrument Volume
+            </span>
           </div>
 
           <div className="h-64 w-full flex items-center justify-center">
@@ -214,7 +229,7 @@ export default function AnalyticsPage() {
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ backgroundColor: "#090A0F", borderColor: "#30363D", fontSize: 11 }}
+                    contentStyle={{ backgroundColor: "#06080D", borderColor: "#1E293B", borderRadius: "8px", fontSize: 11 }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -223,25 +238,29 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Chart 4: Top Targeted Merchants */}
-        <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-4">
+        <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-2">
               <Store className="w-4 h-4 text-amber-400" />
               Top Targeted Merchant Midpoints
             </span>
-            <span className="text-[10px] font-mono text-slate-400">Incident Frequency</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50">
+              Incident Frequency
+            </span>
           </div>
 
-          <div className="space-y-3 font-mono text-xs pt-2">
+          <div className="space-y-3.5 font-mono text-xs pt-2">
             {data?.top_targeted_merchants.map((m, idx) => (
-              <div key={m.merchant_id} className="space-y-1">
+              <div key={m.merchant_id} className="space-y-1.5 p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80">
                 <div className="flex justify-between text-slate-300">
-                  <span>{m.merchant_id}</span>
-                  <span className="text-red-400 font-bold">{m.fraud_count} Attacks</span>
+                  <span className="font-semibold text-white">{m.merchant_id}</span>
+                  <span className="text-rose-400 font-bold px-2 py-0.2 rounded-full bg-rose-500/10 border border-rose-500/20 text-[10px]">
+                    {m.fraud_count} Attacks
+                  </span>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-[#090A0F]">
+                <div className="w-full h-1.5 rounded-full bg-slate-900 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-red-400"
+                    className="h-full rounded-full bg-gradient-to-r from-rose-500 to-amber-500 transition-all duration-500"
                     style={{ width: `${Math.min(100, m.fraud_count * 3)}%` }}
                   />
                 </div>

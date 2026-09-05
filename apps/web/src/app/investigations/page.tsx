@@ -133,32 +133,35 @@ export default function InvestigationsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#21262D] pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/60 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <SearchCheck className="w-5 h-5 text-emerald-400" />
-            <h1 className="text-xl font-bold tracking-tight text-white">AI Case Investigation Dossier</h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-red-500/10 text-red-400 border border-red-500/30">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+              <SearchCheck className="w-4 h-4 text-emerald-400" />
+            </div>
+            <h1 className="text-xl font-bold tracking-tight text-white">Autonomous AI Investigation Dossier</h1>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
               CRITICAL SEVERITY
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            Controlled LangGraph autonomous reasoning with deterministic arithmetic & human-in-the-loop sign-off
+            Controlled LangGraph autonomous reasoning with deterministic loss arithmetic & human sign-off
           </p>
         </div>
 
         {/* Case Selector Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto">
+        <div className="flex items-center gap-2 overflow-x-auto py-1">
           {CASE_LIST.map((c) => (
             <button
               key={c.id}
               onClick={() => setSelectedCaseId(c.id)}
-              className={`px-3 py-1.5 rounded text-xs font-mono transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-2 ${
                 selectedCaseId === c.id
-                  ? "bg-[#161B22] text-white border border-[#30363D] shadow-sm font-semibold"
-                  : "text-slate-400 hover:text-white hover:bg-[#161B22]/50 border border-transparent"
+                  ? "glass-card text-emerald-300 border-emerald-500/40 bg-emerald-500/[0.08] shadow-md shadow-emerald-500/5 font-semibold"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/40 border border-slate-800/60"
               }`}
             >
+              <span className={`w-1.5 h-1.5 rounded-full ${selectedCaseId === c.id ? "bg-emerald-400" : "bg-slate-600"}`} />
               {c.id}
             </button>
           ))}
@@ -170,59 +173,64 @@ export default function InvestigationsPage() {
         {/* Left 2 Cols: Evidence, Report & Impact */}
         <div className="lg:col-span-2 space-y-6">
           {/* Executive Summary Card */}
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-3">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-3.5 shadow-xl">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider">
-                Executive Summary
+              <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                Executive Summary & Synthesis
               </span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 font-bold">
+              <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold">
                 RECOMMENDATION: {report?.recommended_action || "HOLD"}
               </span>
             </div>
-            <p className="text-xs text-slate-200 leading-relaxed font-mono">
+            <p className="text-xs text-slate-200 leading-relaxed font-mono bg-slate-950/60 p-3.5 rounded-lg border border-slate-800/80">
               {report?.executive_summary}
             </p>
           </div>
 
           {/* Financial Impact Section (Deterministic Arithmetic) */}
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-4">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-4 shadow-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <DollarSign className="w-4 h-4 text-emerald-400" />
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <DollarSign className="w-4 h-4 text-emerald-400" />
+                </div>
                 <h2 className="text-sm font-bold text-white tracking-wide">
                   Financial Exposure & Mitigation Loss Matrix
                 </h2>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">Deterministic Arithmetic</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50">
+                Deterministic Arithmetic
+              </span>
             </div>
 
             {/* 3 Impact Numbers */}
             <div className="grid grid-cols-3 gap-3 font-mono">
-              <div className="p-3 rounded bg-[#090A0F] border border-[#21262D]">
-                <div className="text-[10px] text-slate-400">Attempted Volume</div>
+              <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                <div className="text-[10px] text-slate-400 uppercase tracking-wider">Attempted Volume</div>
                 <div className="text-base font-bold text-white mt-1">
                   ₹{impact?.attempted_fraud_value.toLocaleString("en-IN")}
                 </div>
-                <div className="text-[10px] text-slate-500 mt-0.5">Instant Auth Amount</div>
+                <div className="text-[10px] text-slate-500 mt-1">Instant Auth Amount</div>
               </div>
-              <div className="p-3 rounded bg-[#090A0F] border border-[#21262D]">
-                <div className="text-[10px] text-slate-400">Estimated Exposure</div>
-                <div className="text-base font-bold text-red-400 mt-1">
+              <div className="p-3.5 rounded-xl bg-rose-500/[0.04] border border-rose-500/20">
+                <div className="text-[10px] text-rose-400 uppercase tracking-wider">Estimated Exposure</div>
+                <div className="text-base font-bold text-rose-400 mt-1">
                   ₹{impact?.estimated_exposure.toLocaleString("en-IN")}
                 </div>
-                <div className="text-[10px] text-red-400/80 mt-0.5">Network Ring Value</div>
+                <div className="text-[10px] text-rose-400/70 mt-1">Network Ring Value</div>
               </div>
-              <div className="p-3 rounded bg-[#090A0F] border border-[#21262D]">
-                <div className="text-[10px] text-slate-400">FP Friction Cost</div>
+              <div className="p-3.5 rounded-xl bg-amber-500/[0.04] border border-amber-500/20">
+                <div className="text-[10px] text-amber-400 uppercase tracking-wider">FP Friction Cost</div>
                 <div className="text-base font-bold text-amber-400 mt-1">
                   ₹{impact?.estimated_false_positive_cost.toFixed(2)}
                 </div>
-                <div className="text-[10px] text-slate-500 mt-0.5">Churn Risk Penalty</div>
+                <div className="text-[10px] text-amber-400/70 mt-1">Customer Churn Penalty</div>
               </div>
             </div>
 
             {/* Loss Matrix Bars */}
-            <div className="space-y-2 pt-2 border-t border-[#21262D]">
+            <div className="space-y-2.5 pt-2 border-t border-slate-800/60">
               <div className="text-[11px] font-mono text-slate-400">
                 Expected Loss by Action Policy (Lower is Better):
               </div>
@@ -233,17 +241,17 @@ export default function InvestigationsPage() {
                     return (
                       <div
                         key={act}
-                        className={`flex items-center justify-between p-2 rounded border ${
+                        className={`flex items-center justify-between p-2.5 rounded-lg border transition-all ${
                           isOptimal
-                            ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300"
-                            : "bg-[#090A0F] border-[#21262D] text-slate-300"
+                            ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 shadow-sm"
+                            : "bg-slate-950/60 border-slate-800/80 text-slate-300 hover:border-slate-700/80"
                         }`}
                       >
                         <div className="flex items-center gap-2">
                           <span className="font-bold">{act}</span>
                           {isOptimal && (
-                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                              OPTIMAL
+                            <span className="px-2 py-0.2 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                              OPTIMAL ACTION
                             </span>
                           )}
                         </div>
@@ -258,13 +266,13 @@ export default function InvestigationsPage() {
           {/* Strict Separation: Observed Facts vs Fraud Hypotheses */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Facts */}
-            <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D] space-y-2.5">
+            <div className="p-4 rounded-xl glass-card border border-slate-800/80 space-y-3 shadow-xl">
               <span className="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5" /> Observed Facts (Empirical)
               </span>
-              <div className="space-y-1.5 text-xs font-mono text-slate-300 max-h-60 overflow-y-auto pr-1">
+              <div className="space-y-2 text-xs font-mono text-slate-300 max-h-60 overflow-y-auto pr-1">
                 {report?.observed_facts.map((fact, idx) => (
-                  <div key={idx} className="p-1.5 rounded bg-[#090A0F] border border-[#21262D] text-[11px]">
+                  <div key={idx} className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-[11px] leading-relaxed">
                     {fact}
                   </div>
                 ))}
@@ -272,13 +280,13 @@ export default function InvestigationsPage() {
             </div>
 
             {/* Hypotheses */}
-            <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D] space-y-2.5">
+            <div className="p-4 rounded-xl glass-card border border-slate-800/80 space-y-3 shadow-xl">
               <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                 <AlertTriangle className="w-3.5 h-3.5" /> Inferred Hypotheses
               </span>
-              <div className="space-y-1.5 text-xs font-mono text-slate-300 max-h-60 overflow-y-auto pr-1">
+              <div className="space-y-2 text-xs font-mono text-slate-300 max-h-60 overflow-y-auto pr-1">
                 {report?.fraud_hypotheses.map((hyp, idx) => (
-                  <div key={idx} className="p-1.5 rounded bg-[#090A0F] border border-[#21262D] text-[11px]">
+                  <div key={idx} className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-[11px] leading-relaxed">
                     {hyp}
                   </div>
                 ))}
@@ -290,13 +298,17 @@ export default function InvestigationsPage() {
         {/* Right 1 Col: Agent Tool Trace & Human Sign-off */}
         <div className="space-y-6">
           {/* Agent Investigation Timeline */}
-          <div className="p-5 rounded-lg bg-[#161B22] border border-[#30363D] space-y-3">
+          <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-3.5 shadow-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Bot className="w-4 h-4 text-emerald-400" />
-                <h2 className="text-sm font-bold text-white tracking-wide">Agent Tool Execution Trace</h2>
+                <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                  <Bot className="w-4 h-4 text-emerald-400" />
+                </div>
+                <h2 className="text-sm font-bold text-white tracking-wide">Agent Tool Trace</h2>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400">9 Tools Audited</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">
+                9 Tools Audited
+              </span>
             </div>
 
             <div className="space-y-2 text-xs font-mono">
@@ -313,12 +325,12 @@ export default function InvestigationsPage() {
               ].map((step, idx) => (
                 <div
                   key={idx}
-                  className="flex items-start gap-2.5 p-2 rounded bg-[#090A0F] border border-[#21262D]"
+                  className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 hover:border-slate-700/80 transition-colors"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-white font-semibold">{step.tool}</span>
-                    <div className="text-[10px] text-slate-400">{step.desc}</div>
+                    <div className="text-[10px] text-slate-400 mt-0.5">{step.desc}</div>
                   </div>
                 </div>
               ))}
@@ -326,33 +338,35 @@ export default function InvestigationsPage() {
           </div>
 
           {/* Human-in-the-Loop Sign-off Checkpoint */}
-          <div className="p-5 rounded-lg bg-[#161B22] border border-amber-500/40 space-y-4">
+          <div className="p-5 rounded-xl glass-card border border-amber-500/30 space-y-4 shadow-xl">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <UserCheck className="w-4 h-4 text-amber-400" />
+                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                  <UserCheck className="w-4 h-4 text-amber-400" />
+                </div>
                 <h2 className="text-sm font-bold text-white tracking-wide">Human Analyst Sign-off</h2>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">
                 REQUIRED
               </span>
             </div>
 
-            <p className="text-xs text-slate-300 font-mono">
-              Consequential actions (<span className="text-red-400 font-bold">HOLD</span> /{" "}
-              <span className="text-amber-400 font-bold">REVIEW</span>) require human analyst confirmation before execution.
+            <p className="text-xs text-slate-300 font-mono leading-relaxed">
+              Consequential actions (<span className="text-rose-400 font-bold">HOLD</span> /{" "}
+              <span className="text-amber-400 font-bold">REVIEW</span>) require human analyst authorization before execution.
             </p>
 
             {actionSuccess && (
-              <div className="p-2.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">
+              <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">
                 {actionSuccess}
               </div>
             )}
 
-            <div className="space-y-2">
+            <div className="space-y-2.5 pt-1">
               <button
                 onClick={() => handleDecision("HOLD")}
                 disabled={decisionSubmitting}
-                className="w-full py-2.5 rounded text-xs font-bold font-mono bg-red-600 hover:bg-red-500 text-white transition-all shadow-sm disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full py-2.5 rounded-xl text-xs font-bold font-mono bg-rose-600 hover:bg-rose-500 text-white transition-all shadow-lg shadow-rose-600/20 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 <Lock className="w-3.5 h-3.5" />
                 <span>Authorize Transaction HOLD</span>
@@ -361,14 +375,14 @@ export default function InvestigationsPage() {
                 <button
                   onClick={() => handleDecision("STEP_UP")}
                   disabled={decisionSubmitting}
-                  className="py-2 rounded text-xs font-bold font-mono bg-[#21262D] hover:bg-[#30363D] text-slate-200 border border-[#30363D]"
+                  className="py-2.5 rounded-xl text-xs font-bold font-mono glass-card hover:bg-slate-800 text-slate-200 border border-slate-700/80 transition-all"
                 >
                   Step-Up 2FA
                 </button>
                 <button
                   onClick={() => handleDecision("ALLOW")}
                   disabled={decisionSubmitting}
-                  className="py-2 rounded text-xs font-bold font-mono bg-[#21262D] hover:bg-[#30363D] text-slate-200 border border-[#30363D]"
+                  className="py-2.5 rounded-xl text-xs font-bold font-mono glass-card hover:bg-slate-800 text-slate-200 border border-slate-700/80 transition-all"
                 >
                   Dismiss / Allow
                 </button>

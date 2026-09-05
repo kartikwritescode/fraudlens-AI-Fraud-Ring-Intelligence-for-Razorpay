@@ -160,12 +160,14 @@ export default function FraudRingsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#21262D] pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/60 pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <Network className="w-5 h-5 text-red-400" />
+            <div className="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+              <Network className="w-4 h-4 text-rose-400" />
+            </div>
             <h1 className="text-xl font-bold tracking-tight text-white">Fraud-Ring Graph Intelligence Explorer</h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-red-500/10 text-red-400 border border-red-500/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
               COMMUNITY DETECTION
             </span>
           </div>
@@ -175,11 +177,11 @@ export default function FraudRingsPage() {
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-2 text-[10px] font-mono overflow-x-auto">
+        <div className="flex items-center gap-2 text-[10px] font-mono overflow-x-auto py-1">
           {Object.entries(nodeColors).map(([type, color]) => (
-            <div key={type} className="flex items-center gap-1.5 px-2 py-1 rounded bg-[#161B22] border border-[#30363D]">
-              <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color.border }} />
-              <span className="text-slate-300">{type}</span>
+            <div key={type} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
+              <span className="w-2 h-2 rounded-full ring-2 ring-white/10" style={{ backgroundColor: color.border }} />
+              <span className="text-slate-300 font-medium">{type}</span>
             </div>
           ))}
         </div>
@@ -189,17 +191,22 @@ export default function FraudRingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left 1 Col: Ring Selector List */}
         <div className="space-y-3">
-          <div className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 px-1">
-            Discovered Fraud Rings ({rings.length})
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+              Discovered Fraud Rings
+            </span>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/50">
+              {rings.length} ACTIVE
+            </span>
           </div>
 
           {loading ? (
-            <div className="p-8 text-center text-xs font-mono text-slate-500 bg-[#161B22]/40 rounded-lg border border-[#21262D]">
+            <div className="p-8 text-center text-xs font-mono text-slate-400 glass-card rounded-xl border border-slate-800/80">
               <Loader2 className="w-5 h-5 animate-spin mx-auto mb-2 text-emerald-400" />
               Scanning graph communities...
             </div>
           ) : rings.length === 0 ? (
-            <div className="p-6 text-center text-xs font-mono text-slate-500 bg-[#161B22]/40 rounded-lg border border-[#21262D]">
+            <div className="p-6 text-center text-xs font-mono text-slate-400 glass-card rounded-xl border border-slate-800/80">
               No active rings detected.
             </div>
           ) : (
@@ -217,25 +224,31 @@ export default function FraudRingsPage() {
                       setSelectedRingId(ring.ring_id);
                       setSelectedNode(null);
                     }}
-                    className={`w-full text-left p-3 rounded-lg border transition-all ${
+                    className={`w-full text-left p-3.5 rounded-xl border transition-all ${
                       isSelected
-                        ? "bg-[#161B22] border-emerald-500/50 shadow-md"
-                        : "bg-[#090A0F] border-[#21262D] hover:border-[#30363D]"
+                        ? "glass-card border-emerald-500/50 bg-emerald-500/[0.04] shadow-lg shadow-emerald-500/5"
+                        : "glass-card border-slate-800/70 hover:border-slate-700/80 hover:bg-slate-800/30"
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className={`font-mono text-xs font-bold ${isSelected ? "text-emerald-400" : "text-white"}`}>
-                        {ring.ring_id}
-                      </span>
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2 h-2 rounded-full ${isSelected ? "bg-emerald-400 animate-pulse" : "bg-slate-600"}`} />
+                        <span className={`font-mono text-xs font-bold ${isSelected ? "text-emerald-400" : "text-white"}`}>
+                          {ring.ring_id}
+                        </span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
                         {riskVal.toFixed(2)}
                       </span>
                     </div>
-                    <div className="text-[11px] text-slate-400 font-mono mt-1 capitalize">
+                    <div className="text-[11px] text-slate-400 font-mono mt-2 capitalize font-medium">
                       {patternStr}
                     </div>
-                    <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 mt-2 pt-2 border-t border-[#21262D]">
-                      <span>{ring.member_count || 0} Accounts</span>
+                    <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mt-2.5 pt-2.5 border-t border-slate-800/60">
+                      <span className="flex items-center gap-1.5">
+                        <Users className="w-3 h-3 text-slate-500" />
+                        {ring.member_count || 0} Accounts
+                      </span>
                       <span className="text-white font-semibold">₹{(amtVal / 1000).toFixed(0)}k Vol</span>
                     </div>
                   </button>
@@ -246,29 +259,38 @@ export default function FraudRingsPage() {
         </div>
 
         {/* Center 2 Cols: React Flow Interactive Graph Canvas */}
-        <div className="lg:col-span-2 rounded-lg bg-[#090A0F] border border-[#30363D] overflow-hidden flex flex-col h-[680px] relative">
-          <div className="p-3 border-b border-[#21262D] bg-[#161B22]/60 flex items-center justify-between text-xs font-mono">
-            <span className="text-slate-300 font-bold flex items-center gap-2">
-              <Layers className="w-3.5 h-3.5 text-emerald-400" />
-              Graph Subgraph: {selectedRingId}
+        <div className="lg:col-span-2 rounded-xl glass-card border border-slate-800/80 overflow-hidden flex flex-col h-[680px] relative shadow-xl">
+          <div className="p-3.5 border-b border-slate-800/60 bg-slate-900/60 flex items-center justify-between text-xs font-mono backdrop-blur-sm">
+            <span className="text-slate-200 font-bold flex items-center gap-2">
+              <Layers className="w-4 h-4 text-emerald-400" />
+              Graph Subgraph: <span className="text-emerald-400">{selectedRingId}</span>
             </span>
-            <span className="text-slate-400">
-              {nodes.length} Nodes / {edges.length} Edges
-            </span>
+            <div className="flex items-center gap-3 text-[11px] text-slate-400">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                {nodes.length} Nodes
+              </span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
+                {edges.length} Edges
+              </span>
+            </div>
           </div>
 
           <div className="flex-1 w-full h-full relative">
             {graphLoading && (
-              <div className="absolute inset-0 bg-[#090A0F]/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-xs font-mono text-slate-400 gap-2">
+              <div className="absolute inset-0 bg-[#06080D]/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center text-xs font-mono text-slate-300 gap-2">
                 <Loader2 className="w-6 h-6 animate-spin text-emerald-400" />
                 <span>Traversing multi-entity graph neighborhood...</span>
               </div>
             )}
 
             {nodes.length === 0 && !graphLoading ? (
-              <div className="w-full h-full flex flex-col items-center justify-center text-xs font-mono text-slate-500 p-8 text-center">
-                <Network className="w-8 h-8 text-slate-600 mb-2" />
-                <p>Select a fraud ring from the left to visualize its multi-entity topology.</p>
+              <div className="w-full h-full flex flex-col items-center justify-center text-xs font-mono text-slate-400 p-8 text-center">
+                <div className="w-12 h-12 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-center mb-3">
+                  <Network className="w-6 h-6 text-slate-500" />
+                </div>
+                <p className="max-w-xs text-slate-400">Select a fraud ring from the left to visualize its multi-entity topology.</p>
               </div>
             ) : (
               <ReactFlow
@@ -279,14 +301,14 @@ export default function FraudRingsPage() {
                 onNodeClick={onNodeClick}
                 fitView
               >
-                <Background color="#161B22" gap={20} size={1} />
-                <Controls className="!bg-[#161B22] !border-[#30363D] !text-white" />
+                <Background color="#1E293B" gap={24} size={1} />
+                <Controls className="!bg-slate-900/90 !border-slate-700/60 !text-white !rounded-lg !shadow-xl" />
                 <MiniMap
                   nodeColor={(n: any) => {
                     const raw = n.data?.raw;
                     return raw?.type ? nodeColors[raw.type]?.border || "#38BDF8" : "#38BDF8";
                   }}
-                  className="!bg-[#090A0F] !border-[#21262D]"
+                  className="!bg-slate-950/90 !border-slate-800/80 !rounded-lg"
                 />
               </ReactFlow>
             )}
@@ -297,15 +319,22 @@ export default function FraudRingsPage() {
         <div className="space-y-4">
           {/* Selected Node Inspector (If clicked) */}
           {selectedNode && (
-            <div className="p-4 rounded-lg bg-[#161B22] border border-cyan-500/40 space-y-2 animate-in fade-in">
+            <div className="p-4 rounded-xl glass-card border border-cyan-500/40 space-y-3 animate-in fade-in shadow-lg shadow-cyan-500/5">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-cyan-400 font-bold">Inspected Entity</span>
-                <span className="text-[10px] text-slate-400">{selectedNode.type}</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+                  <span className="text-cyan-400 font-bold">Inspected Node</span>
+                </div>
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
+                  {selectedNode.type}
+                </span>
               </div>
-              <div className="font-mono text-sm font-bold text-white truncate">{selectedNode.id}</div>
-              <div className="text-xs font-mono text-slate-400">
-                Risk Score:{" "}
-                <span className="text-red-400 font-bold">
+              <div className="font-mono text-xs font-bold text-white break-all p-2 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                {selectedNode.id}
+              </div>
+              <div className="flex items-center justify-between text-xs font-mono pt-1">
+                <span className="text-slate-400">Node Risk Score:</span>
+                <span className="text-rose-400 font-bold px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">
                   {typeof selectedNode.risk_score === "number" ? selectedNode.risk_score.toFixed(2) : "N/A"}
                 </span>
               </div>
@@ -314,45 +343,45 @@ export default function FraudRingsPage() {
 
           {/* Ring Metrics Card */}
           {selectedRing && (
-            <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D] space-y-3">
+            <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-4 shadow-xl">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold text-white uppercase">{selectedRing.ring_id}</span>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/10 text-red-400 border border-red-500/20">
+                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">{selectedRing.ring_id}</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/10 text-rose-400 border border-rose-500/20">
                   {selectedRing.risk_band || "CRITICAL"}
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="p-2 rounded bg-[#090A0F] border border-[#21262D]">
-                  <span className="text-[10px] text-slate-400">Attempted</span>
-                  <div className="text-sm font-bold text-white mt-0.5">
+              <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
+                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">Attempted</span>
+                  <div className="text-sm font-bold text-white mt-1">
                     ₹{(selectedRing.attempted_amount || 0).toLocaleString("en-IN")}
                   </div>
                 </div>
-                <div className="p-2 rounded bg-[#090A0F] border border-[#21262D]">
-                  <span className="text-[10px] text-slate-400">Growth Rate</span>
-                  <div className="text-sm font-bold text-amber-400 mt-0.5">
+                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80">
+                  <span className="text-[10px] text-slate-400 uppercase tracking-wider">Growth Rate</span>
+                  <div className="text-sm font-bold text-amber-400 mt-1">
                     +{selectedRing.growth_rate || 1.0}x / 24h
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-1.5 text-xs font-mono text-slate-300">
-                <div className="flex justify-between">
+              <div className="space-y-2 text-xs font-mono text-slate-300 pt-1">
+                <div className="flex justify-between py-1 border-b border-slate-800/50">
                   <span className="text-slate-400">Members:</span>
-                  <span>{selectedRing.member_count || 0}</span>
+                  <span className="font-bold text-white">{selectedRing.member_count || 0}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between py-1 border-b border-slate-800/50">
                   <span className="text-slate-400">Devices:</span>
-                  <span>{selectedRing.device_count || 0}</span>
+                  <span className="font-bold text-white">{selectedRing.device_count || 0}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between py-1 border-b border-slate-800/50">
                   <span className="text-slate-400">IP Subnets:</span>
-                  <span>{selectedRing.ip_count || 0}</span>
+                  <span className="font-bold text-white">{selectedRing.ip_count || 0}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Tokens:</span>
-                  <span>{selectedRing.payment_token_count || 0}</span>
+                <div className="flex justify-between py-1">
+                  <span className="text-slate-400">Payment Tokens:</span>
+                  <span className="font-bold text-white">{selectedRing.payment_token_count || 0}</span>
                 </div>
               </div>
             </div>
@@ -360,21 +389,21 @@ export default function FraudRingsPage() {
 
           {/* Formation Timeline */}
           {selectedRing && (
-            <div className="p-4 rounded-lg bg-[#161B22] border border-[#30363D] space-y-3">
+            <div className="p-5 rounded-xl glass-card border border-slate-800/80 space-y-3.5 shadow-xl">
               <div className="flex items-center gap-2">
-                <Clock className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-xs font-bold text-white font-mono uppercase">Formation Timeline</span>
+                <Clock className="w-4 h-4 text-emerald-400" />
+                <span className="text-xs font-bold text-white font-mono uppercase tracking-wider">Formation Timeline</span>
               </div>
 
-              <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+              <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
                 {(selectedRing.timeline || []).map((evt, idx) => (
-                  <div key={idx} className="p-2 rounded bg-[#090A0F] border border-[#21262D] text-xs font-mono">
+                  <div key={idx} className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs font-mono hover:border-slate-700/80 transition-colors">
                     <div className="flex items-center justify-between text-[10px]">
-                      <span className="text-amber-400 font-bold">{evt.event_type || "EVENT"}</span>
-                      <span className="text-slate-500">{evt.timestamp ? evt.timestamp.slice(11, 19) : ""}</span>
+                      <span className="text-amber-400 font-bold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">{evt.event_type || "EVENT"}</span>
+                      <span className="text-slate-400">{evt.timestamp ? evt.timestamp.slice(11, 19) : ""}</span>
                     </div>
-                    <div className="text-slate-200 mt-1 font-semibold">{evt.title || ""}</div>
-                    <p className="text-[11px] text-slate-400 mt-0.5">{evt.description || ""}</p>
+                    <div className="text-slate-200 mt-2 font-semibold">{evt.title || ""}</div>
+                    <p className="text-[11px] text-slate-400 mt-1 leading-relaxed font-sans">{evt.description || ""}</p>
                   </div>
                 ))}
               </div>
