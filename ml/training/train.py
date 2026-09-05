@@ -75,14 +75,14 @@ def train_and_evaluate(
 
     print("\n[*] Training XGBoost Classifier...")
     model = XGBClassifier(
-        n_estimators=300,
+        n_estimators=400,
         max_depth=5,
-        learning_rate=0.04,
+        learning_rate=0.03,
         subsample=0.85,
         colsample_bytree=0.85,
         scale_pos_weight=scale_weight,
         eval_metric=["aucpr", "logloss"],
-        early_stopping_rounds=early_stopping_rounds,
+        early_stopping_rounds=max(25, early_stopping_rounds),
         random_state=42,
         tree_method="hist",
     )

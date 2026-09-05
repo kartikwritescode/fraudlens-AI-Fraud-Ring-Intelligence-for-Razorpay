@@ -196,9 +196,9 @@ export default function LiveRiskPage() {
                 <th className="py-3 px-3 w-[11%] font-semibold">Amount</th>
                 <th className="py-3 px-3 w-[8%] font-semibold">Score</th>
                 <th className="py-3 px-3 w-[10%] font-semibold">Risk Band</th>
-                <th className="py-3 px-3 w-[18%] font-semibold">Primary Reason</th>
+                <th className="py-3 px-3 w-[17%] font-semibold">Primary Reason</th>
                 <th className="py-3 px-3 w-[8%] font-semibold">Ring</th>
-                <th className="py-3 px-3 w-[6%] font-semibold text-right">Action</th>
+                <th className="py-3 pl-3 pr-5 w-[7%] font-semibold text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/50">
@@ -285,14 +285,14 @@ export default function LiveRiskPage() {
                     <td className="py-2.5 px-3 font-mono text-[11px] text-cyan-400 font-semibold truncate" title={tx.ring_id || "—"}>
                       {tx.ring_id || "—"}
                     </td>
-                    <td className="py-2.5 px-3 text-right">
+                    <td className="py-2.5 pl-3 pr-5 text-right">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           setInspectTx(tx);
                           setInvestigationResult(null);
                         }}
-                        className="px-2 py-1 rounded text-[10px] font-mono font-bold bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-all hover:border-slate-500 shadow-sm"
+                        className="px-2.5 py-1 rounded text-[10px] font-mono font-bold bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-all hover:border-slate-500 shadow-sm"
                       >
                         Inspect
                       </button>

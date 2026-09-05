@@ -140,6 +140,18 @@ class RiskScorer:
                 reason_codes.append("Customer account has previous failed or flagged activity on record")
             elif feat == "merchant_tx_count_1h" and val > 20:
                 reason_codes.append(f"Target merchant experiencing abnormal burst velocity ({int(val)} tx/hr)")
+            elif feat == "ip_distinct_cust_1h" and val >= 2:
+                reason_codes.append(f"Subnet concurrency spike: IP address shared by {int(val)} active accounts within 1 hour")
+            elif feat == "ip_tx_count_1h" and val >= 5:
+                reason_codes.append(f"Abnormal IP burst velocity ({int(val)} transactions executed from same IP in past 1 hour)")
+            elif feat == "ip_failed_count_1h" and val >= 2:
+                reason_codes.append(f"Elevated IP failure burst ({int(val)} failed authorization attempts in past 1 hour)")
+            elif feat == "dev_distinct_cust_1h" and val >= 2:
+                reason_codes.append(f"Hardware device reused across {int(val)} accounts in past 1 hour")
+            elif feat == "tok_distinct_cust_1h" and val >= 1:
+                reason_codes.append("Payment instrument token reused across multiple identities within 1 hour")
+            elif feat == "is_high_ticket" and val == 1.0:
+                reason_codes.append(f"High-ticket liquidation value (Rs. {feature_values.get('amount', 0):,.2f}) exceeds normal velocity profile")
             elif feat == "amount" and val > 25000:
                 reason_codes.append(f"Unusually large transaction amount (Rs. {val:,.2f})")
             else:
@@ -170,8 +182,8 @@ class RiskScorer:
         else:
             features = self.extractor.extract_features_for_transaction(tx, update_state=update_state)
 
-        # Build feature DataFrame
-        df_feat = pd.DataFrame([[features[k] for k in self.feature_names]], columns=self.feature_names)
+        # Build feature DataFrame with fallback for any missing custom keys
+        df_feat = pd.DataFrame([[features.get(k, 0.0) for k in self.feature_names]], columns=self.feature_names)
 
         # Predict probability
         prob = float(self.model.predict_proba(df_feat)[0, 1])

@@ -30,6 +30,14 @@ FEATURE_NAMES = [
     "is_new_device",
     "is_new_ip",
     "has_previous_suspicious_activity",
+    "ip_tx_count_1h",
+    "ip_distinct_cust_1h",
+    "ip_failed_count_1h",
+    "dev_distinct_cust_1h",
+    "tok_distinct_cust_1h",
+    "is_card",
+    "is_netbanking",
+    "is_high_ticket",
 ]
 
 
@@ -56,6 +64,14 @@ class StreamingFeatureExtractor:
         self.device_customers: Dict[str, set] = defaultdict(set)
         self.ip_customers: Dict[str, set] = defaultdict(set)
         self.token_customers: Dict[str, set] = defaultdict(set)
+
+        # Rolling 1-hour entity transaction history for velocity bursts
+        # ip_hash -> deque of (ts, cust_id, is_failed)
+        self.ip_1h_dq: Dict[str, deque] = defaultdict(deque)
+        # dev_id -> deque of (ts, cust_id)
+        self.dev_1h_dq: Dict[str, deque] = defaultdict(deque)
+        # token_hash -> deque of (ts, cust_id)
+        self.tok_1h_dq: Dict[str, deque] = defaultdict(deque)
 
     def extract_features_for_transaction(
         self, tx: Dict[str, Any], update_state: bool = True
@@ -135,6 +151,33 @@ class StreamingFeatureExtractor:
         hour = tx_dt.hour
         unusual_hour = 1.0 if (1 <= hour <= 5) else 0.0
 
+        # 8. Rolling 1-hour entity velocity (burst syndicate detection)
+        # IP rolling 1h
+        dq_ip = self.ip_1h_dq[ip_hash]
+        while dq_ip and (ts - dq_ip[0][0] > 3600):
+            dq_ip.popleft()
+        ip_tx_1h = len(dq_ip)
+        ip_custs_1h = len(set(x[1] for x in dq_ip))
+        ip_fails_1h = sum(1 for x in dq_ip if x[2])
+
+        # Device rolling 1h
+        dq_dev = self.dev_1h_dq[dev_id]
+        while dq_dev and (ts - dq_dev[0][0] > 3600):
+            dq_dev.popleft()
+        dev_custs_1h = len(set(x[1] for x in dq_dev))
+
+        # Token rolling 1h
+        dq_tok = self.tok_1h_dq[token_hash]
+        while dq_tok and (ts - dq_tok[0][0] > 3600):
+            dq_tok.popleft()
+        tok_custs_1h = len(set(x[1] for x in dq_tok))
+
+        # 9. Payment method and ticket size flags
+        method = tx.get("payment_method", "upi")
+        is_card = 1.0 if method == "card" else 0.0
+        is_netbanking = 1.0 if method == "netbanking" else 0.0
+        is_high_ticket = 1.0 if amount >= 4999.0 else 0.0
+
         features = {
             "amount": amount,
             "amount_to_customer_median": amount_to_median,
@@ -153,6 +196,14 @@ class StreamingFeatureExtractor:
             "is_new_device": float(is_new_dev),
             "is_new_ip": float(is_new_ip),
             "has_previous_suspicious_activity": float(has_prev_suspicious),
+            "ip_tx_count_1h": float(ip_tx_1h),
+            "ip_distinct_cust_1h": float(ip_custs_1h),
+            "ip_failed_count_1h": float(ip_fails_1h),
+            "dev_distinct_cust_1h": float(dev_custs_1h),
+            "tok_distinct_cust_1h": float(tok_custs_1h),
+            "is_card": is_card,
+            "is_netbanking": is_netbanking,
+            "is_high_ticket": is_high_ticket,
         }
 
         # Update state if requested
@@ -167,6 +218,10 @@ class StreamingFeatureExtractor:
             self.device_customers[dev_id].add(cust_id)
             self.ip_customers[ip_hash].add(cust_id)
             self.token_customers[token_hash].add(cust_id)
+
+            self.ip_1h_dq[ip_hash].append((ts, cust_id, is_failed))
+            self.dev_1h_dq[dev_id].append((ts, cust_id))
+            self.tok_1h_dq[token_hash].append((ts, cust_id))
 
         return features
 

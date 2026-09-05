@@ -95,13 +95,16 @@ def test_inference_and_shap_explainability():
         "device_reuse_count": 8.0,
         "ip_reuse_count": 5.0,
         "payment_token_reuse_count": 6.0,
-        "account_age_days": 45.0,
+        "account_age_days": 0.0,
         "failed_payment_ratio": 0.50,
         "geographic_mismatch": 0.0,
         "unusual_transaction_hour": 1.0,
         "is_new_device": 1.0,
         "is_new_ip": 1.0,
         "has_previous_suspicious_activity": 1.0,
+        "dev_distinct_cust_1h": 4.0,
+        "is_card": 1.0,
+        "is_high_ticket": 1.0,
     }
 
     result = scorer.assess_transaction(suspicious_payload, custom_features=custom_feats)
